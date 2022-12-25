@@ -1,5 +1,6 @@
-from django.shortcuts import render
 from random import randint
+
+from django.shortcuts import render
 
 from . import forms
 
@@ -18,11 +19,17 @@ def get_numbers(request):
         unique = True if 'unique' in request.POST else False
 
         if qtd <= 0:
-            context['error_messages'].append('A quantidade de números não pode ser menor ou igual a 0')
+            context['error_messages'].append(
+                'A quantidade de números não pode ser menor ou igual a 0'
+            )
         if begin > end:
-            context['error_messages'].append('O valor inicial não pode ser maior que o final')
+            context['error_messages'].append(
+                'O valor inicial não pode ser maior que o final'
+            )
         if qtd > (end - begin) + 1 and unique:
-            context['error_messages'].append('Essa opção não é possível para valores únicos')
+            context['error_messages'].append(
+                'Essa opção não é possível para valores únicos'
+            )
         if context['error_messages']:
             return render(request, 'gen_numbers/index.html', context)
 
