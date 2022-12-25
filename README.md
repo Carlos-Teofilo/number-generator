@@ -12,6 +12,8 @@ Um gerador de números aleatórios inteiros
 #### Criando um ambiente virual e ativando
 <pre>
 <code> $ python -m venv venv</code>
+</pre>
+<pre>
 <code> $ source venv/bin/activate</code>
 </pre>
 <br>
