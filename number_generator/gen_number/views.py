@@ -5,25 +5,36 @@ from . import forms
 
 
 def get_numbers(request):
-    context = {}
+    context = {
+        'error_messages': [],
+        'form': forms.GenNumbersForm(),
+    }
 
     if request.method == 'POST':
-        form = forms.GenNumbersForm(request.POST)
+        form = forms.GenNumbersForm(request.POST or None)
+        begin = int(request.POST['begin'])
+        end = int(request.POST['end'])
+        qtd = int(request.POST['qtd'])
+        unique = True if 'unique' in request.POST else False
+
+        if qtd <= 0:
+            context['error_messages'].append('A quantidade de números não pode ser menor ou igual a 0')
+        if begin > end:
+            context['error_messages'].append('O valor inicial não pode ser maior que o final')
+        if qtd > (end - begin) + 1 and unique:
+            context['error_messages'].append('Essa opção não é possível para valores únicos')
+        if context['error_messages']:
+            return render(request, 'gen_numbers/index.html', context)
+
         if form.is_valid():
-            n = random_numbers(form.cleaned_data)
+            n = random_numbers(begin, end, qtd, unique)
             context['numbers'] = n
-    
-    context['form_gen_numbers'] = forms.GenNumbersForm(),
 
-    return render(request, 'gen_number/index.html', context)
+    return render(request, 'gen_numbers/index.html', context)
 
 
-def random_numbers(form_cleaned_data: dict):
+def random_numbers(begin, end, qtd, unique):
     numbers = []
-    begin = int(form_cleaned_data['begin'])
-    end = int(form_cleaned_data['end'])
-    qtd = int(form_cleaned_data['qtd'])
-    unique = form_cleaned_data['unique']
 
     if unique:
         while len(numbers) < qtd:

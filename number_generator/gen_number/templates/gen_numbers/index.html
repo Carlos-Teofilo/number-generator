@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Gerador de números</title>
+</head>
+<body>
+    <form action="{% url 'index' %}" method="post" autocomplete="off">
+        {% csrf_token %}
+        <fieldset><legend><h3>Digite os valores abaixo</h3></legend>
+            {% if error_messages %}
+            <ul>
+                {% for message in error_messages %}
+                    <li>{{ message }}</li>
+                {% endfor %}
+            </ul>
+            {% endif %}
+            <div>
+                <p>Números inteiros entre:</p>
+                <p>{{ form.begin }} e {{ form.end }}</p>
+            </div>
+
+            <div>
+                <p>Quantidade de números:</p>
+                <p>{{ form.qtd }}</p>
+            </div>
+
+            <div>
+                <p>Números únicos: {{ form.unique }}</p>
+            </div>
+            <button type="submit">Gerar</button>
+        </fieldset>
+    </form>
+
+    <div>
+        <ul class="numbers">
+        {% for number in numbers %}
+            <li style="list-style-type: none; display: inline-block">{{ number }}</li>
+        {% endfor %}
+        </ul>
+    </div>
+</body>
+</html>
